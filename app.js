@@ -9,7 +9,7 @@ const clue = {
 };
 
 function start() {
-  app.innerHTML = '<section class="screen start"><div class="topbar"><h1 class="title">工银金融<br>时空局</h1><p class="subtitle">进入历史，修复失衡的财富系统</p></div><div class="start-cta"><button data-a="launch">启动时空档案　›</button><p class="caption">参赛概念原型</p></div></section>';
+  app.innerHTML = '<section class="screen start start-has-bg"><div class="topbar"><h1 class="title">工银金融<br>时空局</h1><p class="subtitle">进入历史，修复失衡的财富系统</p></div><div class="start-cta"><button data-a="launch" aria-label="启动时空档案">启动时空档案　›</button><p class="caption">参赛概念原型</p></div></section>';
 }
 
 function prologue() {
