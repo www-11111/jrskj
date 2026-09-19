@@ -21,26 +21,29 @@ function prologue() {
 function hall() {
   const gate = S.hall < 2 ? `<div class="modal-layer"><div class="modal-card"><h2>${S.hall === 0 ? '身份确认' : '任务说明'}</h2><p>${S.hall === 0 ? '见习财富调查员' : '历史中的财富系统正在失衡，请进入不同世界调查异常原因。'}</p><button data-a="hall-next">${S.hall === 0 ? '确认身份' : '继续'}</button></div></div>` : '';
   const jiafuState = S.done ? '已稳住 · 缺口查清' : '库银告急';
-  const jiafuDesc = S.done ? '库银从 9 天撑到 15 天，时间差已验明' : '贾府档案信号异常，库银只够撑 9 天，请入府核查';
+  const jiafuDesc = S.done ? '库银 9 天 → 15 天，卷宗已封存' : '贾府档案信号异常，库银只够撑 9 天，请入府核查';
   const jiafuBtn = S.done ? '再次核查　›' : '查看贾府档案　›';
   const robinState = S.done ? '下一档案 · 信号微弱' : '档案封存';
-  const robinDesc = S.done ? '荒岛上没有银号，第一笔交换怎么成交，敬请期待' : '一座岛，一个人，第一枚钱币还没出现';
+  const robinDesc = '荒岛上没有钱，第一笔交换怎么成交？';
   const poundState = S.done ? '下一档案 · 信号微弱' : '待解锁';
-  const poundDesc = S.done ? '没人见过他的钱，却人人都信他有钱，敬请期待' : '一张取不出来的支票，为何能一路畅通';
-  const assistantText = S.done ? '贾府一案已归档。<br>你验明了收支时间错配，下一档案信号正在靠近，敬请期待。' : '检测到贾府求救信号。<br>库银只够撑 9 天，请入府核查。';
+  const poundDesc = '一张花不出去的大钞，为什么让他一路都被当成贵客？';
+  const assistantText = S.done ? '贾府卷已归档。<br>检测到两段微弱信号，靠近中。' : '检测到贾府求救信号。<br>库银只够撑 9 天，请入府核查。';
   let preview = '';
   if (S.preview) {
     const isRobinson = S.preview === 'robinson';
     const title = isRobinson ? '鲁滨逊岛资本实验' : '百万英镑信用迷局';
-    const bodyText = !S.done
-      ? '下一档案信号尚未清晰。请先破贾府案，库银只够撑 9 天，先入府核查。'
-      : (isRobinson
-        ? '信号来自一座孤岛。岛上没有现银，没有账房，只有一双手和一堆鱼。你在贾府学会了看时间差，下一关要学会看东西怎么变成钱。正式档案待解锁。'
-        : '信号来自雾都街头。一张无法兑现的百万支票，让一个穷小子一路被奉为上宾。你在贾府查的是没钱花，下一关要查的是没见过的钱为什么管用。正式档案待解锁。');
-    preview = `<div class="modal-layer"><div class="modal-card"><h2>${title}</h2><p>${bodyText}</p><button data-a="close-preview">明白了</button></div></div>`;
+    let bodyText = '';
+    if (!S.done) {
+      bodyText = '信号强度 ▂＿＿<br>碎片无法解析，需先闭合贾府信号。';
+    } else if (isRobinson) {
+      bodyText = '信号强度 ▂▂＿＿<br><br>Day 37，鱼换到了木材。<br>但没人说清，一把斧子值几条鱼。<br><br>—— 正式档案待解锁 ——';
+    } else {
+      bodyText = '信号强度 ▂▂＿＿<br><br>伦敦，雾。他从没花出去过一镑现钱。<br>整条街，却都为他记着账。<br><br>—— 正式档案待解锁 ——';
+    }
+    preview = `<div class="modal-layer preview-layer"><div class="modal-card"><h2>${title}</h2><p>${bodyText}</p><button data-a="close-preview">明白了</button></div></div>`;
   }
-  const body = `<section class="screen hall ${S.hall < 2 ? 'gated' : ''}"><header class="hall-head"><h1 class="title">管理局大厅</h1><div class="identity"><span class="dot"></span>身份确认　见习财富调查员</div></header><div class="archive-list"><article class="archive primary"><h2>贾府现金流危机</h2><p class="alert">${jiafuState}</p><p>${jiafuDesc}</p><button data-a="case">${jiafuBtn}</button></article><article class="archive ${S.done ? '' : 'muted'}"><h2>鲁滨逊岛资本实验</h2><p>${robinState}</p><p>${robinDesc}</p><button data-a="preview" data-id="robinson">查看预告　›</button></article><article class="archive ${S.done ? '' : 'muted'}"><h2>百万英镑信用迷局</h2><p>${poundState}</p><p>${poundDesc}</p><button data-a="preview" data-id="pound">查看预告　›</button></article></div><div class="assistant"><div style="width:2.6rem;height:2.6rem;overflow:hidden;flex-shrink:0;border-radius:.5rem;background:rgba(255,255,255,.06);"><img src="${robot}" alt="工小智" style="display:block;width:5.2rem;max-width:none;height:2.6rem;object-fit:cover;object-position:left center;"></div><p>${assistantText}</p></div></section>`;
-  app.innerHTML = body + gate + preview;
+  const inner = `<header class="hall-head"><h1 class="title">管理局大厅</h1><div class="identity"><span class="dot"></span>身份确认　见习财富调查员</div></header><div class="archive-list"><article class="archive primary"><h2>贾府现金流危机</h2><p class="alert">${jiafuState}</p><p>${jiafuDesc}</p><button data-a="case">${jiafuBtn}</button></article><article class="archive ${S.done ? '' : 'muted'}"><h2>鲁滨逊岛资本实验</h2><p>${robinState}</p><p>${robinDesc}</p><button data-a="preview" data-id="robinson">查看预告　›</button></article><article class="archive ${S.done ? '' : 'muted'}"><h2>百万英镑信用迷局</h2><p>${poundState}</p><p>${poundDesc}</p><button data-a="preview" data-id="pound">查看预告　›</button></article></div><div class="assistant"><div style="width:2.6rem;height:2.6rem;overflow:hidden;flex-shrink:0;border-radius:.5rem;background:rgba(255,255,255,.06);"><img src="${robot}" alt="工小智" style="display:block;width:5.2rem;max-width:none;height:2.6rem;object-fit:cover;object-position:left center;"></div><p>${assistantText}</p></div>${gate}${preview}`;
+  app.innerHTML = `<section class="screen hall ${S.hall < 2 ? 'gated' : ''}">${inner}</section>`;
 }
 
 function caseBrief() {
